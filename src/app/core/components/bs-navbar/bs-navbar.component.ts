@@ -1,8 +1,8 @@
 
 import { ShoppingCart } from 'src/app/shared/models/shopping-cart';
 import { ShoppingCartService } from 'src/app/shared/services/shopping-cart.service';
-import { AuthService } from './../../../shared/services/auth.service';
-import { AppUser } from './../../../shared/models/app-user';
+import { AuthService } from 'src/app/shared/services/auth.service';
+import { AppUser } from 'src/app/shared/models/app-user';
 import { Component, OnInit } from '@angular/core';
 
 

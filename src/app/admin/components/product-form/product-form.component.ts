@@ -1,6 +1,6 @@
 import { Router, ActivatedRoute } from '@angular/router';
-import { ProductService } from './../../../shared/services/product.service';
-import { CategoryService } from './../../../shared/services/category.service';
+import { ProductService } from 'src/app/shared/services/product.service';
+import { CategoryService } from 'src/app/shared/services/category.service';
 import { Component } from '@angular/core';
 import { Product } from 'src/app/shared/models/product';
 import { take } from 'rxjs/operators';
