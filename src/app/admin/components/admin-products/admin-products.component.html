@@ -35,6 +35,7 @@
 
   <data-table-column
       [property]="'key'"
+      [header]="'Edit'"
   >
   <ng-template #dataTableCell let-item = "item">
       <a [routerLink]="['/admin/products/', item.key]">Edit</a>
