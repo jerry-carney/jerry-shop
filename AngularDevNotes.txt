@@ -670,3 +670,33 @@ C:\AngularJSpractice\MoshTutorial\jerry-shop>
 Google images for products, save them in a pc folder, then host them in Imgur.
 ColumbianCoffee.jpg saved on pc and hosted in Imgur as: 'https://i.imgur.com/mJ3u1Bv.jpg'
 Use Imgur urls in the application templates (html);  i.e.,name='Columbian Coffee' imageUrl='https://i.imgur.com/mJ3u1Bv.jpg'
+
+> firebase deploy
+
+=== Deploying to 'jerry-shop'...
+
+i  deploying hosting
+i  hosting[jerry-shop]: beginning deploy...
+i  hosting[jerry-shop]: found 12 files in dist/jerry-shop
++  hosting[jerry-shop]: file upload complete
+i  hosting[jerry-shop]: finalizing version...
++  hosting[jerry-shop]: version finalized
+i  hosting[jerry-shop]: releasing new version...
++  hosting[jerry-shop]: release complete
+
++  Deploy complete!
+
+Project Console: https://console.firebase.google.com/project/jerry-shop/overview
+Hosting URL: https://jerry-shop.firebaseapp.com
+
+> git push -u origin master
+Enumerating objects: 37, done.
+Counting objects: 100% (37/37), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (18/18), done.
+Writing objects: 100% (20/20), 2.78 KiB | 473.00 KiB/s, done.
+Total 20 (delta 12), reused 0 (delta 0)
+remote: Resolving deltas: 100% (12/12), completed with 12 local objects.
+To https://github.com/jerry-carney/jerry-shop.git
+   840dbb1..7cd96e0  master -> master
+Branch 'master' set up to track remote branch 'master' from 'origin'.
