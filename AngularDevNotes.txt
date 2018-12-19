@@ -1,0 +1,672 @@
+***** ANGULAR 6 and BOOTSTRAP 4 *****
+
+dN: My preference; I always run the cmd prompt window(s) as Administrator
+dN: download and install nodejs from
+https://nodejs.org/en
+
+> node --version    //verifies that you have nodejs installed and tells you the version
+v8.12.0
+
+> npm install -g @angular/cli            //globally installs Angular CLI (Command Line Interface)
+
+> ng --version       //verifies that you have Angular CLI is installed and tells you the version, mine is version 6.2.6
+Angular CLI: 6.2.6
+Node: 8.12.0
+OS: win32 x64
+Angular: 6.1.10
+... animations, common, compiler, compiler-cli, core, forms
+... http, language-service, platform-browser
+... platform-browser-dynamic, router
+
+Package                           Version
+-----------------------------------------------------------
+@angular-devkit/architect         0.8.6
+@angular-devkit/build-angular     0.8.6
+@angular-devkit/build-optimizer   0.8.6
+@angular-devkit/build-webpack     0.8.6
+@angular-devkit/core              0.8.6
+@angular-devkit/schematics        0.8.6
+@angular/cli                      6.2.6
+@angular/fire                     5.1.0
+@ngtools/webpack                  6.2.6
+@schematics/angular               0.8.6
+@schematics/update                0.8.6
+rxjs                              6.2.2
+typescript                        2.9.2
+webpack                           4.23.1
+
+dN: install Visual Studio Code from
+https://code.visualstudio.com
+dN: install somewhere other than C:/ProgrameFiles (it complains)
+dN: for me, vscode was installed to (it think it was the default location):
+C:\Users\jerry\AppData\Local\Programs\Microsoft VS Code\bin                 //code.exe is in this bin
+dN: make sure the your system PATH variable contains the above path
+
+dN: install typescript and its compiler; typescript get transpiled in javascript which browsers understand.
+I.E. Browsers don't understand typescript
+> npm install -g typescript       //installs  typescript and its compiler globally
+> tsc --version         //verifies that the typescript compiler is installed and tells you the version
+Version 3.0.3
+
+dN: To see the tsc in action; create a typescript file - for example main.ts
+Write some typescript code in main.ts
+> tsc main.ts      //transpiles main.ts and creates main.js (if there are no compilaiton errors) 
+> node main.js     //runs the javascript file
+
+dN: ***** Creating an Angular Application *****
+> cd toTheParentDirOfYourChoice
+> ng new hello-world
+// creates a child dir named hello-world with the essential angular libs and .git respository
+> cd hello-world
+> code .           //launches vscode editor for hello-world project
+
+dn: Todos to make sure your app has what it needs
+You can run the following cmds from a cmd prompt window in the hello-world dir OR console in vscode
+> npm install      //installs anscillary libs
+> npm i jquery popper.js      //most apps need jquery and popper.js
+
+dN: NOTE- I'm taking Mosh Hamedani's Angular4 course where he uses:
+Angular CLI 4 and Bootstrap 3.3.7 which does not play nice with Angular CLI 6 (which I'm using)
+Two choices for Angular CLI 6 to work with bootstrap;
+----- One -----
+> npm install bootstrap@3.3.7 --save
+Use this import is styles.css:
+@import "~bootstrap/dist/css/bootstrap.css";
+In package.json see dependencies:
+:
+    "bootstrap": "^3.3.7",
+    "core-js": "^2.5.4",
+    "jquery": "^3.3.1",
+    "popper.js": "^1.14.4",
+    "rxjs": "~6.2.0",
+:
+----- Two -----
+> npm install bootstrap --save                    // installs latest version of bootstrap; for me it is 4.1.3
+In package.json see dependencies:
+:
+    "bootstrap": "^4.1.3",
+    "core-js": "^2.5.4",
+    "jquery": "^3.3.1",
+    "popper.js": "^1.14.4",
+    "rxjs": "~6.2.0",
+:
+In angular.json add bootstrap file path to the styles section:
+            "styles": [
+              "src/styles.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css"     <-- Add this line
+            ],
+----------------
+I prefer and I'm using:
+Angular CLI 6 and bootstrap 4.1.3      <-- ************ The lastest Angular and bootstrap ********
+dN: NOTE- It is still a pain in the azz taking Mosh Hamedani's Angular4 course;
+having to remedy Angular4 to 6 and bootstrap 3.3.7 to 4.1.3 (where some goutcha's can take days)
+
+Cool way to create components, services, pipes, etc ... at console in vscode:
+> ng g c course     // generates the files for the new component course
+> ng g s course-sevice    // generates the files for the new service course-service
+
+Some cool extensions that I'm currently using in vscode:
+- Angular UI Bootstrapp Snippets
+- Auto Import
+- Bootstrap 4, Font awesome 4, Font Awesome 5 Free & Pro snippets
+- Code Runner
+- GitLens -- Git superchared
+- Python [Linting, Debugging (multi-threaded, remote), Intellisense, code formatting, refactoring, unit tests, snippets, and more.]
+- TSLint
+
+dN: ***** Angular Web Server *****
+In the same directory as your project run
+> ng serve         //Launches Web Server on localhost:4200 and automatically recompiles your bundles when you save a change in your proj
+
+
+
+
+***** DEPLOYMENT *****
+
+dN: JIT (Just In Time compilation) okay for dev --via >ng serve-- recognizes code changes and JIT compiles.
+But not good for prod
+dN: AOT (Ahead Of Time compilaiton) for prod
+dN: package.json
+ "devDependencies": {
+    "@angular/compiler-cli": "^4.0.0",
+dN: Angular JIT compilation: >node_modules/.bin/ngc, creates a bunch of files intermixed with your
+src files; home.component.ngfactory.ts
+dN: Use Angular CLI compiler for Prod
+
+//Build for Prod (optimizes for smaller files into /dist)
+> ng build --prod
+
+dN: build files go into /dist folder
+
+dN: Enviroments and Custom Environments
+environment.ts - dev*
+environment.prod.ts - prod
+environment.test.ts - test (I created this custom enviroment)
+How to tell the difference: here is a technique where you differenciating property to each enviroment file:
+navBarBackgroundColor: 'white' - prod
+navBarBackgroundColor: 'blue' - dev
+navBarBackgroundColor: 'green' - test
+navbar.component.html:
+[style.backgroundColor]="backgroundColor" class="navbar navbar-default"
+navbar.component.ts:
+import { environment } from './../../environments/environment';
+backgroundColor = environment.navBarBackgroundColor;
+
+dN: Since I added a custom test enviroment, I have to add a line to .angular-cli.json:
+"environments": {
+        "dev": "environments/environment.ts",
+        "test": "environments/environment.test.ts", <-- Added this line
+        "prod": "environments/environment.prod.ts"
+      }
+	  
+dN: NOTE- For non dev envs, no "hot module replacement" into the >ng serve that is running
+So if you make a code change for (test | prod), then you must bounce >ng serve
+
+dN: Then run >ng serve for a particular environment and see the different backgroundColor of the navbar
+> ng serve --environment=prod|dev|test   //dev is the default env
+
+
+dN: Linting - tslint
+package.json: "tslint": "~5.3.2"
+tslint.json: contains all the linting rules of which you can update to your liking
+> ng lint
+outputs where the linting issues are in your code
+> ng lint --fix
+fixes all of the easy issues and may leave some more complicated issues for you to deal with
+
+dN: in VSCode install TSLint which will inform you of lint issues while you are coding
+in VSCode prompt type: tslint, this will give you the option to fix all of the issues in your file
+
+dN: You should always lint your code before deploying
+
+
+
+// ****** Git & GitHub ***** (followers-app) *******************************************
+dN: Install Git (read up on it). Create an account in GitHub (read up on it)
+
+dN: GitHub Pages is good place to deploy for static content to see your app on github.io
+in my case; https://jerry-carney.github.io/followers-app/
+We will see below how I got my followers-app deployed to github.io
+
+dN: Go to GitHub and create a new repository; I created followers-app
+dN: When you create a project with Angular CLI, it automatically initialized a git repository
+
+
+// Sets GitHub repository as the origin of our local repository
+C:\AngularJSpractice\MoshTutorial\deploy-demo>git remote add origin https://github.com/jerry-carney/followers-app.git
+
+// Pushes our changes to remote reposity. Result: our source code is in GitHub (go look)
+C:\AngularJSpractice\MoshTutorial\deploy-demo>git push -u origin master  //you may get prompted for your GitHub login and passwd
+Enumerating objects: 101, done.
+Counting objects: 100% (101/101), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (97/97), done.
+Writing objects: 100% (101/101), 97.89 KiB | 1.38 MiB/s, done.
+Total 101 (delta 35), reused 0 (delta 0)
+remote: Resolving deltas: 100% (35/35), done.
+remote:
+remote: Create a pull request for 'master' on GitHub by visiting:
+remote:      https://github.com/jerry-carney/followers-app/pull/new/master
+remote:
+To https://github.com/jerry-carney/followers-app.git
+ * [new branch]      master -> master
+Branch 'master' set up to track remote branch 'master' from 'origin'.
+
+// Install node package for deploying to GitHub Pages globally
+C:\AngularJSpractice\MoshTutorial\deploy-demo>npm i -g angular-cli-ghpages
+C:\Users\jerry\AppData\Roaming\npm\ngh -> C:\Users\jerry\AppData\Roaming\npm\node_modules\angular-cli-ghpages\bin\angular-cli-ghpages
+C:\Users\jerry\AppData\Roaming\npm\angular-cli-ghpages -> C:\Users\jerry\AppData\Roaming\npm\node_modules\angular-cli-ghpages\bin\angular-cli-ghpages
++ angular-cli-ghpages@0.5.3
+added 39 packages from 28 contributors in 20.477s
+
+// Build our application; after running cmd go look at your dist/index.html in VSCode. Not the <base href="https://jerry-carney.github.io/followers-app/">
+C:\AngularJSpractice\MoshTutorial\deploy-demo>ng build --prod --base-href="https://jerry-carney.github.io/followers-app/"
+Your global Angular CLI version (6.2.2) is greater than your local
+version (1.2.4). The local Angular CLI version is used.
+To disable this warning use "ng config -g cli.warnings.versionMismatch false".
+ 10% building modules 7/11 modules 4 active ...Tutorial\deploy-demo\src\polyfills.tsThe final argument to magicString.overwrite(...) should be an options object. See https://github.com/rich-harris/magic-string                       Hash: 8c404c8391799a01d2c7
+Time: 43201ms
+chunk    {0} polyfills.f1192a7e9b8080da0889.bundle.js (polyfills) 195 kB {4} [initial] [rendered]
+chunk    {1} main.5feb8e4ba9b55de00da0.bundle.js (main) 35.9 kB {3} [initial] [rendered]
+chunk    {2} styles.fa3004fcbb67f13ae581.bundle.css (styles) 69 bytes {4} [initial] [rendered]
+chunk    {3} vendor.2683c8f4bc99c25e4468.bundle.js (vendor) 1.29 MB [initial] [rendered]
+chunk    {4} inline.547ea9c355afeedb8fb7.bundle.js (inline) 0 bytes [entry] [rendered]
+
+// >angular-cli-ghpages === >ngh, must be Administrator. Publishes application to GitHub Pages
+C:\AngularJSpractice\MoshTutorial\deploy-demo>ngh
+*** Successfully published
+
+dN: In browser, go to website: https://jerry-carney.github.io/followers-app/ 
+This is my followers-app for myself and others to see/run
+
+dN: To accomplish the last two steps more easily, you can enter them as a script in package.json: (i can live without this script)
+"deploy:gh": "ng build --prod --base-href='https://jerry-carney.github.io/followers-app/' && ngh"
+However; ironically, we updated a source file, i.e.: package.json. So we need to stage and commit to local git, then push origin to master on GitHub.
+
+PS C:\AngularJSpractice\MoshTutorial\deploy-demo> git push -u origin master
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 432 bytes | 432.00 KiB/s, done.
+Total 3 (delta 2), reused 0 (delta 0)
+remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
+To https://github.com/jerry-carney/followers-app.git
+   f2fe84a..1c5cad9  master -> master
+Branch 'master' set up to track remote branch 'master' from 'origin'.
+
+//Now we can run our script
+PS C:\AngularJSpractice\MoshTutorial\deploy-demo> npm run deploy:gh
+
+> deploy-demo@0.0.0 deploy:gh C:\AngularJSpractice\MoshTutorial\deploy-demo
+> ng build --prod --base-href='https://jerry-carney.github.io/followers-app/' && ngh
+
+ 10% building modules 7/14 modules 7 active ...Tutorial\deploy-demo\src\polyfills.tsThe final argument to magicString.overwrite(...) should be an options object. See https://github.com/rich-harris/magic-string                     Hash: 3b61311cb6a3f0d31326Time: 45544ms
+chunk    {0} polyfills.f1192a7e9b8080da0889.bundle.js (polyfills) 195 kB {4} [initial] [rendered]
+chunk    {1} main.5feb8e4ba9b55de00da0.bundle.js (main) 35.9 kB {3} [initial] [rendered]
+chunk    {2} styles.fa3004fcbb67f13ae581.bundle.css (styles) 69 bytes {4} [initial] [rendered]
+chunk    {3} vendor.2683c8f4bc99c25e4468.bundle.js (vendor) 1.29 MB [initial] [rendered]
+chunk    {4} inline.547ea9c355afeedb8fb7.bundle.js (inline) 0 bytes [entry] [rendered]
+*** Successfully published!
+
+dN: I got on my GitHub account and checked the comment for my latest commit to folllowers-app:
+Added deploy gh script to package.json
+
+
+
+// ****** Firebase ***** (jerry-world) *************************************************
+C:\AngularJSpractice\MoshTutorial\jerry-world>npm i -g firebase-tools
+C:\Users\jerry\AppData\Roaming\npm\firebase -> C:\Users\jerry\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js
+
+> @google-cloud/functions-emulator@1.0.0-beta.5 postinstall C:\Users\jerry\AppData\Roaming\npm\node_modules\firebase-tools\node_modules\@google-cloud\functions-emulator
+> node scripts/upgrade-warning
+
+
+If you're using the Emulator via the Firebase CLI, you can
+disregard this message.
+
+If you're upgrading @google-cloud/functions-emulator, these
+are the recommended upgrade steps:
+
+1.  Stop the currently running emulator, if any:
+
+        functions stop
+
+2.  Uninstall the current emulator, if any:
+
+        npm uninstall -g @google-cloud/functions-emulator
+
+3.  Install the new version of the emulator:
+
+        npm install -g @google-cloud/functions-emulator
+
+If you have trouble after upgrading, try deleting the config
+directory found in:
+
+    ~/.config/configstore/@google-cloud/functions-emulator
+
+Then restart the emulator. You can also check for any renegade
+Node.js emulator processes that may need to be killed:
+
+    ps aux | grep node
+
++ firebase-tools@6.0.0
+added 539 packages from 268 contributors in 230.677s
+
+C:\AngularJSpractice\MoshTutorial\jerry-world> firebase login
+? Allow Firebase to collect anonymous CLI usage and error reporting information? Yes
+
+Visit this URL on any device to log in:
+https://accounts.google.com/o/oauth2/auth?client_id=563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com&scope=email%20openid%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloudplatformprojects.readonly%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Ffirebase%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloud-platform&response_type=code&state=988003569&redirect_uri=http%3A%2F%2Flocalhost%3A9005
+
+Waiting for authentication...
+
++  Success! Logged in as gpcarney63@gmail.com
+
+C:\AngularJSpractice\MoshTutorial\jerry-world> firebase init
+
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\AngularJSpractice\MoshTutorial\jerry-world
+
+Before we get started, keep in mind:
+
+  * You are currently outside your home directory
+
+? Are you ready to proceed? Yes
+? Which Firebase CLI features do you want to setup for this folder? Press Space to select features, then
+Enter to confirm your choices. Hosting: Configure and deploy Firebase Hosting sites
+
+=== Project Setup
+
+First, let's associate this project directory with a Firebase project.
+You can create multiple project aliases by running firebase use --add,
+but for now we'll just set up a default project.
+
+? Select a default Firebase project for this directory: jerry-world (jerry-world)
+i  Using project jerry-world (jerry-world)
+
+=== Hosting Setup
+
+Your public directory is the folder (relative to your project directory) that
+will contain Hosting assets to be uploaded with firebase deploy. If you
+have a build process for your assets, use your build's output directory.
+
+? What do you want to use as your public directory? n      //i think i should of answered: dist/jerry-word (i fixed it below)
+? Configure as a single-page app (rewrite all urls to /index.html)? Yes
++  Wrote n/index.html
+
+i  Writing configuration info to firebase.json...
+i  Writing project information to .firebaserc...
+
++  Firebase initialization complete!
+
+C:\AngularJSpractice\MoshTutorial\jerry-world>
+
+dN: firebase.json (in your project, should be updated to this):
+{
+  "hosting": {
+    "public": "dist/jerry-world",
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}
+
+C:\AngularJSpractice\MoshTutorial\jerry-world>ng build --prod
+
+Date: 2018-10-28T16:39:15.769Z
+Hash: 62ba2dddf55def87740b
+Time: 74631ms
+chunk {0} runtime.ec2944dd8b20ec099bf3.js (runtime) 1.44 kB [entry] [rendered]
+chunk {1} main.d8fb708aec9816e8470b.js (main) 232 kB [initial] [rendered]
+chunk {2} polyfills.d6c80b389a3c780d347c.js (polyfills) 59.6 kB [initial] [rendered]
+chunk {3} styles.8abbf1dd153c8dd8b851.css (styles) 128 kB [initial] [rendered]
+
+C:\AngularJSpractice\MoshTutorial\jerry-world>firebase deploy
+
+=== Deploying to 'jerry-world'...
+
+i  deploying hosting
+i  hosting[jerry-world]: beginning deploy...
+i  hosting[jerry-world]: found 7 files in dist
++  hosting[jerry-world]: file upload complete
+i  hosting[jerry-world]: finalizing version...
++  hosting[jerry-world]: version finalized
+i  hosting[jerry-world]: releasing new version...
++  hosting[jerry-world]: release complete
+
++  Deploy complete!
+
+Project Console: https://console.firebase.google.com/project/jerry-world/overview
+Hosting URL: https://jerry-world.firebaseapp.com
+
+C:\AngularJSpractice\MoshTutorial\jerry-world>
+
+
+***** Firebase and Front-end and Back-end No-SQL database for CRUD *****
+dN: In browser open: https://console.firebase.google.com/ as yourself (I'm gpcarney63@gmail)
+dN: I added project FireJerryDemo
+
+> ng new firejerry-demo              // created angular app
+> npm install angularfire2 firebase --save         // installs firebase and libs for working with a angular 2+ app
+> npm install firebase @angular/fire --save
+> grpc@1.16.0 install C:\AngularJSpractice\MoshTutorial\firebase-jerry\node_modules\grpc
+> node-pre-gyp install --fallback-to-build --library=static_library
+
+node-pre-gyp WARN Using request for node-pre-gyp https download
+[grpc] Success: "C:\AngularJSpractice\MoshTutorial\firebase-jerry\node_modules\grpc\src\node\extension_binary\node-v57-win32-x64-unknown\grpc_node.node" is installed via remote
+npm WARN optional SKIPPING OPTIONAL DEPENDENCY: fsevents@1.2.4 (node_modules\fsevents):
+npm WARN notsup SKIPPING OPTIONAL DEPENDENCY: Unsupported platform for fsevents@1.2.4: wanted {"os":"darwin","arch":"any"} (current: {"os":"win32","arch":"x64"})
+
++ @angular/fire@5.1.0
++ firebase@5.5.8
+added 112 packages from 49 contributors and audited 39391 packages in 164.222s
+found 0 vulnerabilities
+
+PS C:\AngularJSpractice\MoshTutorial\firebase-jerry>
+
+dN: In firebase go to FireJerryDemo "Project Overview" and click on "Add Firebase to your web app"
+A Firebase config will appear, copy just the properties, then paste them into environment.ts in vscode like this:
+export const environment = {
+  production: false,
+  firebase: {
+    apiKey: "AIzaSyC0BUtVUpcN1juzGSXwFj9hzDxV8hz1i10",
+    authDomain: "firejerrydemo.firebaseapp.com",
+    databaseURL: "https://firejerrydemo.firebaseio.com",
+    projectId: "firejerrydemo",
+    storageBucket: "firejerrydemo.appspot.com",
+    messagingSenderId: "11305739643"
+  }
+};
+
+dN: update app.module.ts:
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { AngularFireModule } from '@angular/fire'; // not fire2,  DNE
+import { AngularFireDatabaseModule } from '@angular/fire/database'; // not fire2,  DNE
+import { environment } from './../environments/environment';
+import { AppComponent } from './app.component';
+
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireDatabaseModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+
+*********** Animations ***************
+see: https://daneden.github.io/animate.css/
+see: https://github.com/daneden/animate.css (has  what to install, the style settings, and classes)
+> npm install animate.css --save
+In package.json see dependencies:
+:
+    "animate.css": "^3.7.0",
+    "bootstrap": "^4.1.3",
+    "core-js": "^2.5.4",
+    "jquery": "^3.3.1",
+    "popper.js": "^1.14.5",
+:
+In angular.json add animate file path to the styles section:
+            "styles": [
+              "src/styles.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+			  "node_modules/animate.css/animate.min.css"                  <-- Add this line
+            ],
+-------------
+In plyfills.ts, uncomment line:
+import 'web-animations-js';  // Run `npm install --save web-animations-js`.
+> npm install --save web-animations-js
+In package.json see dependencies:
+:
+    "animate.css": "^3.7.0",
+    "bootstrap": "^4.1.3",
+    "core-js": "^2.5.4",
+    "jquery": "^3.3.1",
+    "popper.js": "^1.14.5",
+    "rxjs": "~6.2.0",
+    "web-animations-js": "^2.3.1",
+:
+
+
+*********** Angular Material ***************
+Ref: https://material.angular.io/
+> npm install --save @angular/material @angular/cdk @angular/animations hammerjs
+In package.json see dependencies:
+:
+    "@angular/cdk": "^7.0.4",
+    "@angular/material": "^7.0.4",
+    "@angular/router": "^6.1.0",
+    "bootstrap": "^4.1.3",
+    "core-js": "^2.5.4",
+    "hammerjs": "^2.0.8",
+:
+In styles.css import the theme path to the material theme also add import for icons:
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "https://fonts.googleapis.com/icon?family=Material+Icon";
+body { padding: 40px; }            
+-------------
+app.module.ts snippet:
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+also you must import every Angular Material Module that you use     <--------- NOTE
+dN: Installs to be able to use MatDatePicker:
+> npm i @angular/material-moment-adapter --save
+> npm i moment
+Icon info: https://material.io/tools/icons/?style=baseline
+dN: SASS - css preprocessor, *.scss
+SASS:  Syntactically Awesome Style Sheet (Angular supports SASS)
+dN: To apply Material Typography to all the elements in body of the project:
+index.html:
+<body class="mat-typography">
+
+
+**************** Redux ********************
+Redux - A library that helps you manage the state of your  application.
+Building Blocks: Store(stores states), Actions(Events), Reducers(return new state)
+> npm install ng-redux --save
+> npm install @angular-redux/store@^9 --save        <----- currently use this for imports
+> npm install redux ng2-redux --save
+dN: Type state of object assign
+> npm install tassign --save
+dN: Immutable objects: NOTE: I removed this; i.e., did not use it
+> npm install immutable --save
+dN: immutabe object of type Map = fromJS(INITIAL_STATE) 
+dN: Added Chrome Extension: Redux DevTools
+
+
+**************** Testing ********************
+> ng test
+localhost:9876/debug.html
+> ng test --code-coverage
+
+
+************* TYHXX Notes ******************
+Hi Jerry I am not sure my answer can help u or not. Because I don't remember the details
+But I indeed encountered similar errors when I did that project. I believe Mosh used firebase 4.x.x.
+When I did it, It already became 5.0.0. API changes when the major version changes, although now it moved to @angular/fire, the version still starts with 5.
+So I guess the API in my code still can work. I have my code in my github repo https://github.com/TYHXX/Angular-firebase-onlineShop. 
+Also you may check the official Angular library for Firebase: https://github.com/angular/angularfire2.
+And here is the doc for the diff between v4 and v5: https://github.com/angular/angularfire2/blob/master/docs/version-5-upgrade.md .
+hope it can make something happen.
+
+
+************* Final Project *******************
+dN: NOTE: these install versions were obtained from  a classmate's (TYHXX) final project who was using a 6.0.3 version of Angular
+> traditional basic installs
+> npm install --save firebase@^5.4.2 angularfire2@^5.0.0-rc.12 firebase-tools@^4.2.1
+> npm audit fix
+fixed 0 of 1 vulnerability in 41913 scanned packages
+  1 package update for 1 vuln involved breaking changes
+  (use `npm audit fix --force` to install breaking changes; or refer to `npm audit` for steps to fix these manually
+> npm install --save @ng-bootstrap/ng-bootstrap@^3.2.0
+> npm install --save rxjs-compat@^6.3.2
+> npm install --save font-awesome@^4.7.0
+> npm install --save g@^2.0.1
+> npm install --save ng2-validation@^4.2.0
+> npm install --save angular5-data-table@^1.0.3
+
+
+**************** Deploy to Firebase  ***********************
+C:\AngularJSpractice\MoshTutorial\jerry-shop>firebase --version
+6.0.0
+
+C:\AngularJSpractice\MoshTutorial\jerry-shop>firebase login
+Already logged in as gpcarney63@gmail.com
+
+C:\AngularJSpractice\MoshTutorial\jerry-shop>firebase init
+
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\AngularJSpractice\MoshTutorial\jerry-shop
+
+Before we get started, keep in mind:
+
+  * You are currently outside your home directory
+
+? Are you ready to proceed? Yes
+? Which Firebase CLI features do you want to setup for this folder? Press Space to select features, then Enter to confirm your ch
+oices. Hosting: Configure and deploy Firebase Hosting sites
+
+=== Project Setup
+
+First, let's associate this project directory with a Firebase project.
+You can create multiple project aliases by running firebase use --add,
+but for now we'll just set up a default project.
+
+? Select a default Firebase project for this directory: jerry-shop (jerry-shop)
+i  Using project jerry-shop (jerry-shop)
+
+=== Hosting Setup
+
+Your public directory is the folder (relative to your project directory) that
+will contain Hosting assets to be uploaded with firebase deploy. If you
+have a build process for your assets, use your build's output directory.
+
+? What do you want to use as your public directory? dist/jerry-shop
+? Configure as a single-page app (rewrite all urls to /index.html)? Yes
++  Wrote dist/jerry-shop/index.html
+
+i  Writing configuration info to firebase.json...
+i  Writing project information to .firebaserc...
+
++  Firebase initialization complete!
+
+C:\AngularJSpractice\MoshTutorial\jerry-shop>ng build --prod
+
+Date: 2018-11-30T00:53:28.217Z
+Hash: ad00decfea692c8799ad
+Time: 147345ms
+chunk {0} runtime.06daa30a2963fa413676.js (runtime) 1.44 kB [entry] [rendered]
+chunk {1} main.994db8ea63fb57fa9a80.js (main) 746 kB [initial] [rendered]
+chunk {2} polyfills.f6ae3e8b63939c618130.js (polyfills) 59.6 kB [initial] [rendered]
+chunk {3} styles.2be0c0739b103cb8bf3c.css (styles) 159 kB [initial] [rendered]
+
+C:\AngularJSpractice\MoshTutorial\jerry-shop>firebase deploy
+
+=== Deploying to 'jerry-shop'...
+
+i  deploying hosting
+i  hosting[jerry-shop]: beginning deploy...
+i  hosting[jerry-shop]: found 12 files in dist/jerry-shop
++  hosting[jerry-shop]: file upload complete
+i  hosting[jerry-shop]: finalizing version...
++  hosting[jerry-shop]: version finalized
+i  hosting[jerry-shop]: releasing new version...
++  hosting[jerry-shop]: release complete
+
++  Deploy complete!
+
+Project Console: https://console.firebase.google.com/project/jerry-shop/overview
+Hosting URL: https://jerry-shop.firebaseapp.com
+
+C:\AngularJSpractice\MoshTutorial\jerry-shop>
+
+
+************* Final Project  Continued *******************
+Google images for products, save them in a pc folder, then host them in Imgur.
+ColumbianCoffee.jpg saved on pc and hosted in Imgur as: 'https://i.imgur.com/mJ3u1Bv.jpg'
+Use Imgur urls in the application templates (html);  i.e.,name='Columbian Coffee' imageUrl='https://i.imgur.com/mJ3u1Bv.jpg'
