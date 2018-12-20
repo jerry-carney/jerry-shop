@@ -671,6 +671,16 @@ Google images for products, save them in a pc folder, then host them in Imgur.
 ColumbianCoffee.jpg saved on pc and hosted in Imgur as: 'https://i.imgur.com/mJ3u1Bv.jpg'
 Use Imgur urls in the application templates (html);  i.e.,name='Columbian Coffee' imageUrl='https://i.imgur.com/mJ3u1Bv.jpg'
 
+> ng build --prod
+
+Date: 2018-12-20T17:10:33.169Z
+Hash: edf5218d0b8a1e9fd8bd
+Time: 178036ms
+chunk {0} runtime.06daa30a2963fa413676.js (runtime) 1.44 kB [entry] [rendered]
+chunk {1} main.66db71793697c3b28ce0.js (main) 1.61 MB [initial] [rendered]
+chunk {2} polyfills.f6ae3e8b63939c618130.js (polyfills) 59.6 kB [initial] [rendered]
+chunk {3} styles.a4abc48b210428e9fd3c.css (styles) 159 kB [initial] [rendered]
+
 > firebase deploy
 
 === Deploying to 'jerry-shop'...
